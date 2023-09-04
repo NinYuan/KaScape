@@ -1,7 +1,7 @@
 #coding:UTF-8
 
 
-from traits.api import HasTraits, Str, Int, Button, Symbol,Enum,File,Directory,BaseFile
+from traits.api import  Str,  Button, File
 import numpy as np
 
 from traits.api import HasTraits, Instance, Array, \
@@ -17,13 +17,13 @@ from mayavi.core.ui.api import SceneEditor, MayaviScene, \
 
 from tools.readData import readData
 from tools.getGenePosition import getGeneData
-import cPickle
+import pickle
 
-import ConfigParser
+import configparser
 
 
 class Gene(HasTraits):
-    cp = ConfigParser.SafeConfigParser()
+    cp = configparser.ConfigParser()
 
     cp.read('./KGViewerMain.conf')
     cop = cp.get('kmer','kmerpath')
@@ -45,14 +45,14 @@ class Gene(HasTraits):
     Search = Str
     searchButton = Button
 
-    experimentPathText=File(exists=True)
+    #experimentPathText=File(exists=True)
     experimentPathText=Str
     #experimentPathText = File()
-    experimentPathText='/Users/chenhong/Documents/pkucode/workStudio/G1/data/test/kmer/wrky/all/20220715/NPortionKmer/ON4.txt'
+    #experimentPathText='/Users/chenhong/Documents/pkucode/workStudio/G1/data/test/kmer/wrky/all/20220715/NPortionKmer/ON4.txt'
 
     #controlPathText =File(exists=True)
     controlPathText=Str
-    controlPathText = '/Users/chenhong/Documents/pkucode/workStudio/G1/data/test/kmer/wrky/all/20220715/NPortionKmer/IN4.txt'
+    #controlPathText = '/Users/chenhong/Documents/pkucode/workStudio/G1/data/test/kmer/wrky/all/20220715/NPortionKmer/IN4.txt'
 
     gnum = "4"
     saclefactor = "10"
@@ -80,22 +80,22 @@ class Gene(HasTraits):
         if self.noback_click_yes >= 1:
             self.clear_figure()
         mlab.clf(mlab.colorbar)
-        print 'raw data without backgroud process or to see backgroud'
-        print self.experimentPathText
+        print ('raw data without backgroud process or to see backgroud')
+        print (self.experimentPathText)
 
         cpath = self.cop +'/'+ str(self.gnum) + '.txt'
         sf = float(self.saclefactor)
 
         fMatrix1 = readData(self.controlPathText)
 
-        cMatrix = cPickle.load(open(cpath, "rb"))
+        cMatrix = pickle.load(open(cpath, "rb"))
         rCm = np.rot90(cMatrix, -1)
         self.cMatrix = rCm
         rFm1 = np.rot90(fMatrix1, -1)
 
         self.data = rFm1
         snum = 2 ** int(self.gnum)
-        print snum
+
 
         def picker_callback(picker_obj):
             picked = picker_obj.actors
@@ -103,7 +103,7 @@ class Gene(HasTraits):
             x_, y_, z_ = picker_obj.pick_position
             x = int(round(x_))
             y = int(round(y_))
-            print x, y
+            #print x, y
             self.GeneN = self.cMatrix[x][y]
             self.NumberOrPortion = str(self.data[x][y])
 
@@ -119,7 +119,7 @@ class Gene(HasTraits):
 
 
         cb=mlab.colorbar(orientation='vertical')
-        cb.label_text_property.font_family = 'Times New Roman'
+        cb.label_text_property.font_family = 'arial'
         cb.label_text_property.bold = 0
         cb.label_text_property.font_size = 20
 
@@ -131,24 +131,23 @@ class Gene(HasTraits):
         if self.div_click_yes >= 1:
             self.clear_figure()
         mlab.clf(mlab.colorbar)
-        print "potionDiv"
-        print self.experimentPathText
-        print self.controlPathText
+
 
         cpath = self.cop + '/' + str(self.gnum) + '.txt'
         sf = float(self.saclefactor)
         snum = 2 ** int(self.gnum)
-        print snum
+
         fMatrix1 = readData(self.controlPathText)
         fMatrix2 = readData(self.experimentPathText)
 
-        cMatrix = cPickle.load(open(cpath, "rb"))
+        cMatrix = pickle.load(open(cpath, "rb"))
         rFm1 = np.rot90(fMatrix1, -1)
         rFm2 = np.rot90(fMatrix2, -1)
 
         if len(rFm1) == len(rFm2):
 
-            sm = rFm2 / rFm1
+            #sm = rFm2 / rFm1
+            sm = np.log2(rFm2 / rFm1)
             self.data = sm
 
             rCm = np.rot90(cMatrix, -1)
@@ -169,7 +168,7 @@ class Gene(HasTraits):
             x_, y_, z_ = picker_obj.pick_position
             x = int(round(x_))
             y = int(round(y_))
-            print x, y
+            print (x, y)
             self.GeneN = self.cMatrix[x][y]
             self.NumberOrPortion = str(self.data[x][y])
 
@@ -181,7 +180,7 @@ class Gene(HasTraits):
 
 
         cb = mlab.colorbar(orientation='vertical')
-        cb.label_text_property.font_family = 'Times New Roman'
+        cb.label_text_property.font_family = 'arial'
         cb.label_text_property.bold = 0
         cb.label_text_property.font_size = 20
 
@@ -228,14 +227,14 @@ class Gene(HasTraits):
             x_, y_, z_ = picker_obj.pick_position
             x = int(round(x_))
             y = int(round(y_))
-            print x, y
+
             self.GeneN = self.cMatrix[x][y]
             self.NumberOrPortion = str(self.data[x][y])
         if self.search_click_yes == 0:
             self.search_click_yes += 1
         self.scene_n.mayavi_scene.on_mouse_pick(picker_callback1, type="cell")
         cb = mlab.colorbar(orientation='vertical')
-        cb.label_text_property.font_family = 'Times New Roman'
+        cb.label_text_property.font_family = 'arial'
         cb.label_text_property.bold = 0
         cb.label_text_property.font_size = 20
 
@@ -253,23 +252,23 @@ class Gene(HasTraits):
             show_labels=False,
         ),
         Group(
-            Group(Item(label='KaScape Analysis',height=100),show_border=False, style_sheet='*{font-size: 20px; font-family: Times New Roman}'),
+            Group(Item(label='KaScape Analysis',height=100),show_border=False, style_sheet='*{font-size: 20px; font-family: arial}'),
             Group(
                 Item(name='gnum', label='Random DNA Base Number',resizable=True,height=15, width=10),
                 Group(
                 Item(name='fix1', label='Left Fix Sequence'),
-            Item(name='fix2', label='Right Fix Sequence'),orientation='horizontal'),show_border=True, style_sheet='*{font-size: 18px; font-family: Times New Roman}'),
+            Item(name='fix2', label='Right Fix Sequence'),orientation='horizontal'),show_border=True, style_sheet='*{font-size: 18px; font-family: arial}'),
 
-            Group(Item(name='controlPathText', label='Input Raw Data Path', resizable=True),style_sheet='*{font-size: 18px; font-family: Times New Roman}'),
+            Group(Item(name='controlPathText', label='Input Raw Data Path', resizable=True),style_sheet='*{font-size: 18px; font-family: arial}'),
 
             Group(
 
-                Item(name='kmerNoBackground', label='Raw Data Scape'),show_labels=False, style_sheet='*{font-size: 18px; font-family: Times New Roman}'),
+                Item(name='kmerNoBackground', label='Raw Data Scape'),show_labels=False, style_sheet='*{font-size: 18px; font-family: arial}'),
 
-            Group(Item(name='experimentPathText', label='Output Raw Data Path', resizable=True), style_sheet='*{font-size: 18px; font-family: Times New Roman}'),
+            Group(Item(name='experimentPathText', label='Output Raw Data Path', resizable=True), style_sheet='*{font-size: 18px; font-family: arial}'),
             Group(
 
-                Item(name='pcdiv', label='KaScape (Relative Intensity Signal)'),show_labels=False, style_sheet='*{font-size: 18px; font-family: Times New Roman}'
+                Item(name='pcdiv', label='KaScape ( - relative binding energy)'),show_labels=False, style_sheet='*{font-size: 18px; font-family: arial}'
             ),
 
             Group(
@@ -280,14 +279,14 @@ class Gene(HasTraits):
                 ),
                 Group(Item(name='Search', label='Core Sequence'),
                       Item(name='searchButton', label='Search'), orientation='horizontal'),
-                show_border=True, style_sheet='*{font-size: 18px; font-family: Times New Roman}'
+                show_border=True, style_sheet='*{font-size: 18px; font-family: arial}'
             ),
 
             Group(
                 Item(name='saclefactor', label='Zoom Scale'),
                 Item(name='ATGCScale', label='ATGC Label Scale'),
                 Item(name='ATGCPosition', label='ATGC Label Position'),
-                orientation='horizontal', style_sheet='*{font-size: 18px; font-family: Times New Roman}'
+                orientation='horizontal', style_sheet='*{font-size: 18px; font-family: arial}'
             ),
 
 

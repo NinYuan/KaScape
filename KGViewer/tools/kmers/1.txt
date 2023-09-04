@@ -1,0 +1,8 @@
+(lp1
+(lp2
+S'G'
+aS'C'
+aa(lp3
+S'A'
+aS'T'
+aa.
