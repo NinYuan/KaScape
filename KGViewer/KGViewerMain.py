@@ -45,14 +45,12 @@ class Gene(HasTraits):
     Search = Str
     searchButton = Button
 
-    #experimentPathText=File(exists=True)
+    #experimentPathText=File(exists=True) #/Users/chenhong/Documents/pkucode/workStudio/G1/data/test/kmer/wrky/all/20220715/NPortionKmer/IN4.txt
     experimentPathText=Str
     #experimentPathText = File()
-    #experimentPathText='/Users/chenhong/Documents/pkucode/workStudio/G1/data/test/kmer/wrky/all/20220715/NPortionKmer/ON4.txt'
 
     #controlPathText =File(exists=True)
     controlPathText=Str
-    #controlPathText = '/Users/chenhong/Documents/pkucode/workStudio/G1/data/test/kmer/wrky/all/20220715/NPortionKmer/IN4.txt'
 
     gnum = "4"
     saclefactor = "10"

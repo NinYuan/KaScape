@@ -158,7 +158,7 @@ if __name__ == '__main__':
     figsize=9
     rootdir = '/Users/chenhong/Documents/pkucode/workStudio/G1/data/test/kmer/wrky/'
 
-    cmatrix = '/Users/chenhong/Documents/pkucode/workStudio/G1/data/test/cMatrix/'
+    cmatrix = './KGViewer/tools/kmers/'
     datet = '20230510'
     outdirRoot = '/Users/chenhong/Documents/pkucode/workStudio/G1/data/test/kmer/OutDivInResult/'+datet+'/'
 
@@ -168,4 +168,6 @@ if __name__ == '__main__':
     outdir = outdirRoot + datet + 'BarcodeUnionUnique/'
     osmakedir(outdir)
     getOutDivInDate20230510(basedir, outdir,figsize,cmatrix)
+
+    
 
